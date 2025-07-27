@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <title>ফ্রি কাস্টম এসএমএস</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600&display=swap');
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Hind Siliguri', sans-serif;
+      height: 100vh;
+      overflow: hidden;
+      background: #0f0f0f;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 0;
+    }
+
+    .container {
+      position: relative;
+      z-index: 2;
+      max-width: 420px;
+      width: calc(100% - 40px);
+      margin: 20px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-radius: 16px;
+      padding: 30px 25px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+      color: #fff;
+      animation: fadeIn 1s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .header h2 {
+      margin: 0;
+      font-size: 26px;
+      color: #00ffe7;
+    }
+
+    .animated-text {
+      font-size: 15px;
+      color: #00ffe7;
+      text-align: center;
+      animation: glowFloat 4s ease-in-out infinite;
+      margin-top: 8px;
+      letter-spacing: 0.4px;
+    }
+
+    @keyframes glowFloat {
+      0%, 100% {
+        opacity: 0;
+        transform: translateY(5px);
+        text-shadow: none;
+      }
+      50% {
+        opacity: 1;
+        transform: translateY(-3px);
+        text-shadow: 0 0 5px #00ffe7, 0 0 10px #00ffe7;
+      }
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    label {
+      margin-bottom: 6px;
+      font-weight: 600;
+      color: #eee;
+    }
+
+    input, textarea {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 8px;
+      padding: 12px;
+      font-size: 15px;
+      color: #fff;
+      margin-bottom: 18px;
+      outline: none;
+      transition: background 0.2s, border-color 0.2s;
+    }
+
+    input:focus, textarea:focus {
+      background: rgba(255,255,255,0.2);
+      border-color: #00ffe7;
+    }
+
+    button {
+      background: linear-gradient(135deg, #00ffe7, #00b3a4);
+      color: #000;
+      border: none;
+      padding: 13px;
+      border-radius: 8px;
+      font-weight: bold;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    button:hover {
+      transform: scale(1.03);
+      box-shadow: 0 6px 20px rgba(0,255,230,0.3);
+    }
+    
+    button:disabled {
+      background: #555;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .join-btn {
+      display: block;
+      margin-top: 15px;
+      text-align: center;
+      background: linear-gradient(135deg, #00ffe7, #00b3a4);
+      color: #000;
+      padding: 12px;
+      border-radius: 8px;
+      font-weight: 600;
+      text-decoration: none;
+       transition: all 0.3s ease;
+    }
+
+    .join-btn:hover {
+      box-shadow: 0 6px 20px rgba(0,255,230,0.3);
+    }
+
+    .loading {
+      display: none;
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .spinner {
+      width: 32px;
+      height: 32px;
+      border: 4px solid #333;
+      border-top: 4px solid #00ffe7;
+      border-radius: 50%;
+      margin: 0 auto 10px auto;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .result {
+      margin-top: 18px;
+      padding: 15px;
+      border-radius: 8px;
+      font-size: 14px;
+      display: none;
+      word-wrap: break-word;
+    }
+
+    .success {
+      background: #003322;
+      color: #00ffa1;
+      border-left: 4px solid #00ffa1;
+    }
+
+    .fail {
+      background: #330000;
+      color: #ff6666;
+      border-left: 4px solid #ff4444;
+    }
+  </style>
+</head>
+<body>
+
+  <canvas id="bg"></canvas>
+
+  <div class="container">
+    <div class="header">
+      <h2>ফ্রি কাস্টম এসএমএস পাঠান</h2>
+      <div class="animated-text">আপনার মেসেজ মুহূর্তেই পাঠান, একদম ফ্রি!</div>
+    </div>
+
+    <form id="smsForm">
+      <label for="phone">ফোন নম্বর</label>
+      <input type="text" id="phone" name="phone" placeholder="01XXXXXXXXX" maxlength="11" required>
+
+      <label for="msg">মেসেজ</label>
+      <textarea id="msg" name="msg" placeholder="আপনার মেসেজ লিখুন..." maxlength="160" required></textarea>
+
+      <button type="submit" id="submitBtn">এসএমএস পাঠান</button>
+    </form>
+
+    <a class="join-btn" href="https://t.me/Echoo_Store" target="_blank">চ্যানেল জয়েন করুন</a>
+
+    <div class="loading" id="loading">
+      <div class="spinner"></div>
+      <div>এসএমএস পাঠানো হচ্ছে...</div>
+    </div>
+
+    <div class="result" id="result"></div>
+  </div>
+
+<script>
+    const smsForm = document.getElementById('smsForm');
+    const phoneInput = document.getElementById('phone');
+    const msgInput = document.getElementById('msg');
+    const loadingDiv = document.getElementById('loading');
+    const resultBox = document.getElementById('result');
+    const submitBtn = document.getElementById('submitBtn');
+
+    // নম্বর এবং মেসেজ ইনপুট ভ্যালিড করার জন্য ফাংশন
+    function validateInput() {
+      const phone = phoneInput.value.trim();
+      // ফোন নম্বর ফরম্যাট চেক: 01 দিয়ে শুরু এবং মোট 11 ডিজিট
+      const isPhoneValid = /^01\d{9}$/.test(phone);
+      return isPhoneValid;
+    }
+    
+    // ফর্ম সাবমিট হলে এই ফাংশনটি কাজ করবে
+    smsForm.addEventListener('submit', function(e) {
+      e.preventDefault(); // ফর্মের ডিফল্ট সাবমিট বন্ধ করা হলো
+      
+      const phone = phoneInput.value.trim();
+      const msg = msgInput.value.trim();
+      
+      // পাঠানোর আগে নম্বরটি সঠিক কিনা তা পুনরায় চেক করা হলো
+      if (!validateInput()) {
+        resultBox.className = "result fail";
+        resultBox.innerText = "❌ দয়া করে সঠিক ১১ ডিজিটের ফোন নম্বর দিন (যেমন: 01712345678)।";
+        resultBox.style.display = 'block';
+        return; // নম্বর ভুল হলে আর সামনে এগোবে না
+      }
+
+      // বাটন নিষ্ক্রিয় করা এবং লোডিং দেখানো
+      submitBtn.disabled = true;
+      submitBtn.innerText = 'পাঠানো হচ্ছে...';
+      loadingDiv.style.display = 'block';
+      resultBox.style.display = 'none';
+
+      const url = `https://expcyber.my.id/v3/api.php?phone=${encodeURIComponent(phone)}&msg=${encodeURIComponent(msg)}`;
+
+      fetch(url)
+        .then(res => {
+          // যদি সার্ভার থেকে কোনো এরর আসে (যেমন 404 বা 500)
+          if (!res.ok) {
+            throw new Error(`সার্ভার থেকে সমস্যা হচ্ছে। স্ট্যাটাস: ${res.status}`);
+          }
+          return res.text(); // রেসপন্সকে টেক্সট হিসেবে গ্রহণ
+        })
+        .then(response => {
+          // রেসপন্স পাওয়ার পর তা প্রসেস করা
+          if (response.toLowerCase().includes("sent") || response.toLowerCase().includes("success")) {
+            resultBox.className = "result success";
+            resultBox.innerText = `✅ আপনার এসএমএসটি ${phone} নম্বরে সফলভাবে পাঠানো হয়েছে!`;
+          } else {
+            resultBox.className = "result fail";
+            // এপিআই থেকে পাওয়া আসল রেসপন্স দেখানো হচ্ছে
+            resultBox.innerText = `❌ এসএমএস পাঠানো ব্যর্থ হয়েছে! সার্ভার রেসপন্স: ${response}`;
+          }
+        })
+        .catch(err => {
+          // নেটওয়ার্ক বা অন্য কোনো এরর হলে
+          resultBox.className = "result fail";
+          resultBox.innerText = "❌ সংযোগ ব্যর্থ হয়েছে! এপিআই সার্ভার হয়তো ডাউন আছে অথবা আপনার ইন্টারনেট সংযোগ চেক করুন।";
+          console.error("Fetch Error:", err); // ডিবাগিং এর জন্য কনসোলে এরর দেখানো
+        })
+        .finally(() => {
+          // সব কাজ শেষে লোডিং বন্ধ করা এবং বাটন আবার সক্রিয় করা
+          loadingDiv.style.display = 'none';
+          resultBox.style.display = 'block';
+          submitBtn.disabled = false;
+          submitBtn.innerText = 'এসএমএস পাঠান';
+        });
+    });
+
+
+    // Particle Background
+    const canvas = document.getElementById("bg");
+    const ctx = canvas.getContext("2d");
+    
+    function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+    resizeCanvas();
+    
+    let particles = [];
+    for (let i = 0; i < 100; i++) {
+      particles.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        r: Math.random() * 2 + 1,
+        dx: (Math.random() - 0.5),
+        dy: (Math.random() - 0.5)
+      });
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = "rgba(0,255,230,0.6)";
+      
+      for (let p of particles) {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fill();
+        p.x += p.dx;
+        p.y += p.dy;
+
+        if (p.x < 0 || p.x > canvas.width) p.dx *= -1;
+        if (p.y < 0 || p.y > canvas.height) p.dy *= -1;
+      }
+      requestAnimationFrame(draw);
+    }
+    draw();
+
+    window.addEventListener("resize", resizeCanvas);
+</script>
+</body>
+</html>
