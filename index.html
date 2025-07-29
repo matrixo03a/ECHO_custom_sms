@@ -275,7 +275,7 @@
           // রেসপন্স পাওয়ার পর তা প্রসেস করা
           if (response.toLowerCase().includes("sent") || response.toLowerCase().includes("success")) {
             resultBox.className = "result success";
-            resultBox.innerText = `✅ Your Massage ${phone} Successfully Sended!`;
+            resultBox.innerText = `Failedto send sms. Try again`;
           } else {
             resultBox.className = "result fail";
             // এপিআই থেকে পাওয়া আসল রেসপন্স দেখানো হচ্ছে
