@@ -209,16 +209,16 @@
       <input type="text" id="phone" name="phone" placeholder="01XXXXXXXXX" maxlength="11" required>
 
       <label for="msg">Massage</label>
-      <textarea id="msg" name="msg" placeholder="আপনার মেসেজ লিখুন..." maxlength="160" required></textarea>
+      <textarea id="msg" name="msg" placeholder="Type Your Massage..." maxlength="160" required></textarea>
 
-      <button type="submit" id="submitBtn">এসএমএস পাঠান</button>
+      <button type="submit" id="submitBtn">Send Sms</button>
     </form>
 
     <a class="join-btn" href="https://t.me/+KE-W9MOwXUFjNzg1" target="_blank">Join Telegram</a>
 
     <div class="loading" id="loading">
       <div class="spinner"></div>
-      <div>এসএমএস পাঠানো হচ্ছে...</div>
+      <div>Sms sending...</div>
     </div>
 
     <div class="result" id="result"></div>
@@ -275,7 +275,7 @@
           // রেসপন্স পাওয়ার পর তা প্রসেস করা
           if (response.toLowerCase().includes("sent") || response.toLowerCase().includes("success")) {
             resultBox.className = "result success";
-            resultBox.innerText = `✅ আপনার এসএমএসটি ${phone} নম্বরে সফলভাবে পাঠানো হয়েছে!`;
+            resultBox.innerText = `✅ Your Massage ${phone} Successfully Send!`;
           } else {
             resultBox.className = "result fail";
             // এপিআই থেকে পাওয়া আসল রেসপন্স দেখানো হচ্ছে
