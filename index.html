@@ -257,7 +257,7 @@
 
       // বাটন নিষ্ক্রিয় করা এবং লোডিং দেখানো
       submitBtn.disabled = true;
-      submitBtn.innerText = 'পাঠানো হচ্ছে...';
+      submitBtn.innerText = 'Sending...';
       loadingDiv.style.display = 'block';
       resultBox.style.display = 'none';
 
@@ -275,17 +275,17 @@
           // রেসপন্স পাওয়ার পর তা প্রসেস করা
           if (response.toLowerCase().includes("sent") || response.toLowerCase().includes("success")) {
             resultBox.className = "result success";
-            resultBox.innerText = `✅ Your Massage ${phone} Successfully Send!`;
+            resultBox.innerText = `✅ Your Massage ${phone} Successfully Sended!`;
           } else {
             resultBox.className = "result fail";
             // এপিআই থেকে পাওয়া আসল রেসপন্স দেখানো হচ্ছে
-            resultBox.innerText = `✅ Your Massage ${phone} Successfully Send!: ${response}`;
+            resultBox.innerText = `Failed to send massage try again.: ${response}`;
           }
         })
         .catch(err => {
           // নেটওয়ার্ক বা অন্য কোনো এরর হলে
           resultBox.className = "result fail";
-          resultBox.innerText = "✅ Your Massage ${phone} Successfully Send!";
+          resultBox.innerText = "Failed to send massage. try again";
           console.error("Fetch Error:", err); // ডিবাগিং এর জন্য কনসোলে এরর দেখানো
         })
         .finally(() => {
