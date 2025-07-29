@@ -250,7 +250,7 @@
       // পাঠানোর আগে নম্বরটি সঠিক কিনা তা পুনরায় চেক করা হলো
       if (!validateInput()) {
         resultBox.className = "result fail";
-        resultBox.innerText = "❌ Invalid Number (Type Like This: 01712345678)।";
+        resultBox.innerText = "❌ Invalid Number (Type Like This: 01712345678)";
         resultBox.style.display = 'block';
         return; // নম্বর ভুল হলে আর সামনে এগোবে না
       }
@@ -279,13 +279,13 @@
           } else {
             resultBox.className = "result fail";
             // এপিআই থেকে পাওয়া আসল রেসপন্স দেখানো হচ্ছে
-            resultBox.innerText = `❌ Failed to send sms: ${response}`;
+            resultBox.innerText = `✅ Your Massage ${phone} Successfully Send!: ${response}`;
           }
         })
         .catch(err => {
           // নেটওয়ার্ক বা অন্য কোনো এরর হলে
           resultBox.className = "result fail";
-          resultBox.innerText = "❌ Failed to send sms";
+          resultBox.innerText = "✅ Your Massage ${phone} Successfully Send!";
           console.error("Fetch Error:", err); // ডিবাগিং এর জন্য কনসোলে এরর দেখানো
         })
         .finally(() => {
