@@ -2,7 +2,7 @@
 <html lang="bn">
 <head>
   <meta charset="UTF-8">
-  <title>ফ্রি কাস্টম এসএমএস</title>
+  <title>Free Custom Sms</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600&display=swap');
@@ -200,21 +200,21 @@
 
   <div class="container">
     <div class="header">
-      <h2>ফ্রি কাস্টম এসএমএস পাঠান</h2>
-      <div class="animated-text">আপনার মেসেজ মুহূর্তেই পাঠান, একদম ফ্রি!</div>
+      <h2>Send Custom Sms</h2>
+      <div class="animated-text">Send Your Massage</div>
     </div>
 
     <form id="smsForm">
-      <label for="phone">ফোন নম্বর</label>
+      <label for="phone">Number</label>
       <input type="text" id="phone" name="phone" placeholder="01XXXXXXXXX" maxlength="11" required>
 
-      <label for="msg">মেসেজ</label>
+      <label for="msg">Massage</label>
       <textarea id="msg" name="msg" placeholder="আপনার মেসেজ লিখুন..." maxlength="160" required></textarea>
 
       <button type="submit" id="submitBtn">এসএমএস পাঠান</button>
     </form>
 
-    <a class="join-btn" href="https://t.me/Echoo_Store" target="_blank">চ্যানেল জয়েন করুন</a>
+    <a class="join-btn" href="https://t.me/+KE-W9MOwXUFjNzg1" target="_blank">Join Telegram</a>
 
     <div class="loading" id="loading">
       <div class="spinner"></div>
@@ -250,7 +250,7 @@
       // পাঠানোর আগে নম্বরটি সঠিক কিনা তা পুনরায় চেক করা হলো
       if (!validateInput()) {
         resultBox.className = "result fail";
-        resultBox.innerText = "❌ দয়া করে সঠিক ১১ ডিজিটের ফোন নম্বর দিন (যেমন: 01712345678)।";
+        resultBox.innerText = "❌ Invalid Number (যেমন: 01712345678)।";
         resultBox.style.display = 'block';
         return; // নম্বর ভুল হলে আর সামনে এগোবে না
       }
@@ -279,13 +279,13 @@
           } else {
             resultBox.className = "result fail";
             // এপিআই থেকে পাওয়া আসল রেসপন্স দেখানো হচ্ছে
-            resultBox.innerText = `❌ এসএমএস পাঠানো ব্যর্থ হয়েছে! সার্ভার রেসপন্স: ${response}`;
+            resultBox.innerText = `❌ Failed to send sms: ${response}`;
           }
         })
         .catch(err => {
           // নেটওয়ার্ক বা অন্য কোনো এরর হলে
           resultBox.className = "result fail";
-          resultBox.innerText = "❌ সংযোগ ব্যর্থ হয়েছে! এপিআই সার্ভার হয়তো ডাউন আছে অথবা আপনার ইন্টারনেট সংযোগ চেক করুন।";
+          resultBox.innerText = "❌ Failed to send sms";
           console.error("Fetch Error:", err); // ডিবাগিং এর জন্য কনসোলে এরর দেখানো
         })
         .finally(() => {
